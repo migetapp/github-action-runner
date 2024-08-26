@@ -15,6 +15,12 @@ RUN dnf install -y \
     ruby-devel \
     && dnf clean all
 
+RUN ln -s /usr/bin/podman /usr/bin/docker
+
+RUN mkdir -p /etc/containers/registries.conf.d/ && \
+    echo '[registries.search]' > /etc/containers/registries.conf.d/00-docker.conf && \
+    echo 'registries = ["docker.io"]' >> /etc/containers/registries.conf.d/00-docker.conf
+
 RUN mkdir -p /home/podman/actions-runner && \
     cd /home/podman/actions-runner && \
     curl -o actions-runner-linux-x64.tar.gz -L https://github.com/actions/runner/releases/download/v2.319.1/actions-runner-linux-x64-2.319.1.tar.gz && \
