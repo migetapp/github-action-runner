@@ -18,9 +18,14 @@ RUN dnf install -y \
 RUN ln -s /usr/bin/podman /usr/bin/docker
 
 RUN mkdir -p /etc/containers/registries.conf.d/ && \
-    echo '[registries.search]' > /etc/containers/registries.conf.d/00-docker.conf && \
-    echo 'registries = ["docker.io"]' >> /etc/containers/registries.conf.d/00-docker.conf
-
+    echo "[[registry]]" > /etc/containers/registries.conf.d/default.conf && \
+    echo "prefix = \"docker.io\"" >> /etc/containers/registries.conf.d/default.conf && \
+    echo "location = \"registry-1.docker.io\"" >> /etc/containers/registries.conf.d/default.conf && \
+    echo "insecure = false" >> /etc/containers/registries.conf.d/default.conf && \
+    echo "blocked = false" >> /etc/containers/registries.conf.d/default.conf && \
+    echo "[registries.search]" >> /etc/containers/registries.conf.d/default.conf && \
+    echo "registries = [\"docker.io\"]" >> /etc/containers/registries.conf.d/default.conf
+    
 RUN mkdir -p /home/podman/actions-runner && \
     cd /home/podman/actions-runner && \
     curl -o actions-runner-linux-x64.tar.gz -L https://github.com/actions/runner/releases/download/v2.319.1/actions-runner-linux-x64-2.319.1.tar.gz && \
