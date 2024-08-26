@@ -12,7 +12,12 @@ RUN dnf install -y \
     libffi-devel \
     openssl-devel \
     make \
-    ruby-devel \
+    bzip2 \
+    readline-devel \
+    zlib-devel \
+    libyaml-devel \
+    autoconf \
+    bison \
     && dnf clean all
 
 RUN ln -s /usr/bin/podman /usr/bin/docker
@@ -25,7 +30,7 @@ RUN mkdir -p /etc/containers/registries.conf.d/ && \
     echo "blocked = false" >> /etc/containers/registries.conf.d/default.conf && \
     echo "[registries.search]" >> /etc/containers/registries.conf.d/default.conf && \
     echo "registries = [\"docker.io\"]" >> /etc/containers/registries.conf.d/default.conf
-    
+
 RUN mkdir -p /home/podman/actions-runner && \
     cd /home/podman/actions-runner && \
     curl -o actions-runner-linux-x64.tar.gz -L https://github.com/actions/runner/releases/download/v2.319.1/actions-runner-linux-x64-2.319.1.tar.gz && \
@@ -46,5 +51,16 @@ VOLUME /home/podman/runner
 
 USER podman
 WORKDIR /home/podman
+
+RUN git clone https://github.com/rbenv/rbenv.git /home/podman/.rbenv \
+    && echo 'export PATH="/home/podman/.rbenv/bin:$PATH"' >> /home/podman/.bashrc \
+    && echo 'eval "$(rbenv init -)"' >> /home/podman/.bashrc \
+    && git clone https://github.com/rbenv/ruby-build.git /home/podman/.rbenv/plugins/ruby-build \
+    && echo 'export PATH="/home/podman/.rbenv/plugins/ruby-build/bin:$PATH"' >> /home/podman/.bashrc \
+    && /home/podman/.rbenv/bin/rbenv install 3.3.4 \
+    && /home/podman/.rbenv/bin/rbenv global 3.3.4 \
+    && /home/podman/.rbenv/bin/rbenv rehash
+
+ENV PATH /home/podman/.rbenv/shims:/home/podman/.rbenv/bin:$PATH
 
 ENTRYPOINT ["/home/podman/entrypoint.sh"]
