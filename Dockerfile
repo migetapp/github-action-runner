@@ -14,13 +14,16 @@ RUN dnf install -y \
     make \
     && dnf clean all
 
-RUN cd /home/podman && curl -o actions-runner-linux-x64.tar.gz -L https://github.com/actions/runner/releases/download/v2.319.1/actions-runner-linux-x64-2.319.1.tar.gz && \
+RUN mkdir -p /home/podman/actions-runner && \
+    cd /home/podman/actions-runner && \
+    curl -o actions-runner-linux-x64.tar.gz -L https://github.com/actions/runner/releases/download/v2.319.1/actions-runner-linux-x64-2.319.1.tar.gz && \
     tar xzf actions-runner-linux-x64.tar.gz && \
     rm actions-runner-linux-x64.tar.gz
 
-RUN chown podman -R /home/podman
+RUN mkdir -p /home/podman/runner && \
+    chown -R podman:podman /home/podman
 
-RUN cd /home/podman/bin && chmod 755 installdependencies.sh && ./installdependencies.sh
+RUN cd /home/podman/actions-runner/bin && chmod 755 installdependencies.sh && ./installdependencies.sh
 
 COPY entrypoint.sh /home/podman/entrypoint.sh
 RUN chmod +x /home/podman/entrypoint.sh
