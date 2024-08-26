@@ -27,6 +27,8 @@ RUN chmod +x /home/podman/entrypoint.sh
 
 COPY storage.conf /home/podman/.config/containers/storage.conf
 
+VOLUME /home/podman/runner
+
 USER podman
 WORKDIR /home/podman
 
