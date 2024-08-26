@@ -11,6 +11,8 @@ fi
 
 cd $RUNNER_VOLUME_DIR
 
+sleep 100000000
+
 if [ ! -f "$CONFIG_FILE" ]; then
   echo "Runner is not configured. Configuring..."
   ./config.sh --unattended --replace --name ${RUNNER_NAME} --url https://github.com/${GITHUB_REPOSITORY} --token $RUNNER_TOKEN
