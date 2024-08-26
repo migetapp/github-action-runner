@@ -15,4 +15,5 @@ else
   echo "Runner is already configured. Skipping configuration."
 fi
 
+cd $RUNNER_VOLUME_DIR
 ./run.sh
