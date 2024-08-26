@@ -12,6 +12,7 @@ RUN dnf install -y \
     libffi-devel \
     openssl-devel \
     make \
+    ruby-devel \
     && dnf clean all
 
 RUN mkdir -p /home/podman/actions-runner && \
