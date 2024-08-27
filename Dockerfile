@@ -16,6 +16,7 @@ RUN dnf install -y \
     libyaml-devel \
     postgresql \
     postgresql-devel \
+    yarnpkg \
     && dnf clean all
 
 RUN ln -s /usr/bin/podman /usr/bin/docker
