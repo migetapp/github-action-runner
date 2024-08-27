@@ -24,6 +24,8 @@ RUN mkdir -p /etc/containers/registries.conf.d/ && \
     echo "[[registry]]" >> /etc/containers/registries.conf.d/default.conf && \
     echo "location = \"docker.io\"" >> /etc/containers/registries.conf.d/default.conf
 
+RUN sed -i '/^\[containers\]/a\default_sysctls = []' /etc/containers/containers.conf
+
 RUN mkdir -p /home/podman/actions-runner && \
     cd /home/podman/actions-runner && \
     curl -o actions-runner-linux-x64.tar.gz -L https://github.com/actions/runner/releases/download/v2.319.1/actions-runner-linux-x64-2.319.1.tar.gz && \
