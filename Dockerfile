@@ -1,7 +1,7 @@
 FROM quay.io/podman/stable:latest
 
 USER root
-RUN dnf group install -y "Development Tools"
+RUN dnf group install -y "C Development Tools and Libraries"
 RUN dnf install -y \
     curl \
     jq \
@@ -49,10 +49,7 @@ RUN git clone https://github.com/rbenv/rbenv.git /home/podman/.rbenv \
     && echo 'export PATH="/home/podman/.rbenv/bin:$PATH"' >> /home/podman/.bashrc \
     && echo 'eval "$(rbenv init -)"' >> /home/podman/.bashrc \
     && git clone https://github.com/rbenv/ruby-build.git /home/podman/.rbenv/plugins/ruby-build \
-    && echo 'export PATH="/home/podman/.rbenv/plugins/ruby-build/bin:$PATH"' >> /home/podman/.bashrc \
-    && /home/podman/.rbenv/bin/rbenv install 3.3.4 \
-    && /home/podman/.rbenv/bin/rbenv global 3.3.4 \
-    && /home/podman/.rbenv/bin/rbenv rehash
+    && echo 'export PATH="/home/podman/.rbenv/plugins/ruby-build/bin:$PATH"' >> /home/podman/.bashrc
 
 ENV PATH /home/podman/.rbenv/shims:/home/podman/.rbenv/bin:$PATH
 
