@@ -1,35 +1,28 @@
 FROM quay.io/podman/stable:latest
 
 USER root
+RUN dnf group install "Development Tools"
 RUN dnf install -y \
     curl \
     jq \
     git \
     sudo \
     tar \
-    gcc \
-    glibc-devel \
+    bzip2 \
     libffi-devel \
     openssl-devel \
-    make \
-    bzip2 \
     readline-devel \
     zlib-devel \
     libyaml-devel \
-    autoconf \
-    bison \
+    postgresql-devel \
     && dnf clean all
 
 RUN ln -s /usr/bin/podman /usr/bin/docker
 
 RUN mkdir -p /etc/containers/registries.conf.d/ && \
-    echo "[[registry]]" > /etc/containers/registries.conf.d/default.conf && \
-    echo "prefix = \"docker.io\"" >> /etc/containers/registries.conf.d/default.conf && \
-    echo "location = \"registry-1.docker.io\"" >> /etc/containers/registries.conf.d/default.conf && \
-    echo "insecure = false" >> /etc/containers/registries.conf.d/default.conf && \
-    echo "blocked = false" >> /etc/containers/registries.conf.d/default.conf && \
-    echo "[registries.search]" >> /etc/containers/registries.conf.d/default.conf && \
-    echo "registries = [\"docker.io\"]" >> /etc/containers/registries.conf.d/default.conf
+    echo "unqualified-search-registries = [\"docker.io\"]" > /etc/containers/registries.conf.d/default.conf && \
+    echo "[[registry]]" >> /etc/containers/registries.conf.d/default.conf && \
+    echo "location = \"docker.io\"" >> /etc/containers/registries.conf.d/default.conf
 
 RUN mkdir -p /home/podman/actions-runner && \
     cd /home/podman/actions-runner && \
