@@ -24,7 +24,26 @@ RUN mkdir -p /etc/containers/registries.conf.d/ && \
     echo "[[registry]]" >> /etc/containers/registries.conf.d/default.conf && \
     echo "location = \"docker.io\"" >> /etc/containers/registries.conf.d/default.conf
 
-RUN sed -i '/^\[containers\]/a\default_sysctls = []' /etc/containers/containers.conf
+RUN echo '[containers]' > /etc/containers/containers.conf && \
+    echo 'default_sysctls = []' >> /etc/containers/containers.conf && \
+    echo 'netns="private"' >> /etc/containers/containers.conf && \
+    echo 'userns="auto"' >> /etc/containers/containers.conf && \
+    echo 'ipcns="private"' >> /etc/containers/containers.conf && \
+    echo 'utsns="private"' >> /etc/containers/containers.conf && \
+    echo 'cgroupns="private"' >> /etc/containers/containers.conf && \
+    echo 'cgroups="enabled"' >> /etc/containers/containers.conf && \
+    echo 'log_driver = "k8s-file"' >> /etc/containers/containers.conf && \
+    echo '[network]' >> /etc/containers/containers.conf && \
+    echo 'default_network="slirp4netns"' >> /etc/containers/containers.conf && \
+    echo '[network.slirp4netns]' >> /etc/containers/containers.conf && \
+    echo 'enable_ipv6=true' >> /etc/containers/containers.conf && \
+    echo 'cidr="10.0.2.0/24"' >> /etc/containers/containers.conf && \
+    echo 'mtu=65520' >> /etc/containers/containers.conf && \
+    echo 'port_handler="slirp4netns"' >> /etc/containers/containers.conf && \
+    echo '[engine]' >> /etc/containers/containers.conf && \
+    echo 'cgroup_manager = "cgroupfs"' >> /etc/containers/containers.conf && \
+    echo 'events_logger="file"' >> /etc/containers/containers.conf && \
+    echo 'runtime="crun"' >> /etc/containers/containers.conf
 
 RUN mkdir -p /home/podman/actions-runner && \
     cd /home/podman/actions-runner && \
