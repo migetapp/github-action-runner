@@ -1,7 +1,7 @@
 FROM quay.io/podman/stable:latest
 
 USER root
-RUN dnf group install "Development Tools"
+RUN dnf group install -y "Development Tools"
 RUN dnf install -y \
     curl \
     jq \
